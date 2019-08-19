@@ -31,7 +31,7 @@ class TestUnique(unittest.TestCase):
     def test_two_items_many_times(self):
         self.assertListEqual([0, 1], sorted(unique([1, 1, 0, 1, 1, 0, 0])))
         self.assertListEqual(['b', 'c'], sorted(unique(['b', 'c', 'c', 'c', 'b'])))
-        self.assertListEqual([None, 1], unique([1, 1, None]))
+        self.assertCountEqual([1, None], unique([1, 1, None]))
         self.assertIsInstance(unique([1, 1, None]), list)
         # Cannot sort `None` with `int`
 
