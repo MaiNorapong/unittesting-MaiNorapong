@@ -19,7 +19,7 @@ Write a table describing your test cases.
 | list with one nested list many times  |  list with one nested list  |
 | list with two nested list  |  list with two nested list with same order, nested list items unchanged  |
 | list with two nested list many times  |  list with two nested list  |
-| not a list             |  ValueError         |
+| not a list             |  TypeError          |
 | a large list           |  regular result     |
 
 ## Test Cases for Fraction
