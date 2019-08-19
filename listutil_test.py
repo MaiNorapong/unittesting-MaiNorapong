@@ -3,7 +3,7 @@ import unittest
 from listutil import unique
 
 
-class TestUnique(unittest.TestCase):
+class ListUtilTest(unittest.TestCase):
     """Tests of the unique function"""
 
     def test_empty_list(self):
