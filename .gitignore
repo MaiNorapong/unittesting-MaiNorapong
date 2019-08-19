@@ -16,3 +16,4 @@ htmlcov/
 .project
 .pydevproject
 .vscode/
+.idea/
