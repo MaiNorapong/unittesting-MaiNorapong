@@ -16,7 +16,7 @@ def unique(lst: list) -> list:
     []
     >>> unique(5)
     Traceback (most recent call last):
-      ...
+    ...
     TypeError: 'int' is not a list
     """
     if not isinstance(lst, list):
