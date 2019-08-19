@@ -1,0 +1,18 @@
+# Files not to commit to git
+__pycache__
+*.py[cod]
+/build
+# virtualenv and environment vars
+.env
+venv/
+env/
+
+# code coverage files
+.coverage
+htmlcov/
+/coverage
+
+# Pydev (Eclipse) and VSCode project files
+.project
+.pydevproject
+.vscode/
