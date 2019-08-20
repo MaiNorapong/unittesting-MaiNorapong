@@ -93,9 +93,11 @@ class Fraction:
             if self.is_positive():
                 if other.is_positive():
                     return Fraction(1, 0)
+                # inf + -inf -> indefinite
                 return math.nan
             if other.is_negative():
                 return Fraction(-1, 0)
+            # -inf + inf -> indefinite
             return math.nan
         return Fraction(self.numerator*other.denominator + other.numerator*self.denominator,
                         self.denominator * other.denominator)
@@ -112,8 +114,10 @@ class Fraction:
     def __truediv__(self, other: Fraction) -> Union[Fraction, math.nan]:
         if self.denominator * other.numerator == 0:
             if self.numerator * other.denominator == 0:
+                # zero over zero -> indefinite
                 return math.nan
             if other.numerator < 0:
+                # because negative zero = zero
                 return Fraction(-self.numerator * other.denominator, 0)
         return Fraction(self.numerator * other.denominator, self.denominator * other.numerator)
 
