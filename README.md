@@ -17,7 +17,7 @@ by Bill Gates.
 | list with one nested list many times  |  list with one nested list  |
 | list with two nested list  |  list with two nested list with same order, nested list items unchanged  |
 | list with two nested list many times  |  list with two nested list  |
-| not a list             |  raises TypeError   |
+| not a list             |  raise TypeError    |
 | a large list           |  regular result     |
 
 ## Test Cases for Fraction
@@ -26,7 +26,7 @@ by Bill Gates.
 |------------------------|---------------------|
 | zero as denominator    | one is numerator    |
 | zero as numerator      | one is denominator  |
-| zero as both           | ValueError          |
+| zero as both           | raise ValueError    |
 | numerator and denominator have no common factors | same number is used |
 | numerator and denominator have common factors | the simplest ratio is used |
 | negative numerator     | numerator is negative and denominator is positive |
