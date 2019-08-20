@@ -14,6 +14,9 @@ def to_proper(numerator: int, denominator: int) -> Tuple[int, int]:
         (-2, 3)
         >>> to_proper(3, 4)
         (3, 4)
+
+    Raises:
+        ValueError when both numerator and denominator is zero
     """
     if numerator == 0:
         if denominator == 0:
