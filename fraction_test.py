@@ -154,4 +154,9 @@ class FractionTest(unittest.TestCase):
         # Consider special values like 0, 1/0, -1/0
 
     def test_neg(self):
-        self.assertEqual()
+        self.assertEqual(Fraction(0), -Fraction(0))
+        self.assertEqual(Fraction(-1, 0), -Fraction(1, 0))
+        self.assertEqual(Fraction(-7, 13), -Fraction(7, 13))
+        self.assertEqual(Fraction(-3, 2), -Fraction(3, 2))
+        self.assertEqual(Fraction(3, 1), -Fraction(-3, 1))
+        self.assertEqual(Fraction(2, 5), -Fraction(-2, 5))
