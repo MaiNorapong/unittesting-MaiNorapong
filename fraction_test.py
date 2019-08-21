@@ -163,3 +163,24 @@ class FractionTest(unittest.TestCase):
         self.assertEqual(Fraction(-3, 2), -Fraction(3, 2))
         self.assertEqual(Fraction(3, 1), -Fraction(-3, 1))
         self.assertEqual(Fraction(2, 5), -Fraction(-2, 5))
+
+    def test_is_positive(self):
+        self.assertEqual(True, Fraction(1).is_positive())
+        self.assertEqual(False, Fraction(0).is_positive())
+        self.assertEqual(False, Fraction(-1).is_positive())
+
+    def test_is_negative(self):
+        self.assertEqual(False, Fraction(1).is_negative())
+        self.assertEqual(False, Fraction(0).is_negative())
+        self.assertEqual(True, Fraction(-1).is_negative())
+
+    def test_is_zero(self):
+        self.assertEqual(False, Fraction(1).is_zero())
+        self.assertEqual(True, Fraction(0).is_zero())
+        self.assertEqual(False, Fraction(-1).is_zero())
+
+    def test_is_infinite(self):
+        self.assertEqual(True, Fraction(1, 0))
+        self.assertEqual(False, Fraction(0, 1))
+        self.assertEqual(True, Fraction(-1, 0))
+        self.assertEqual(False, Fraction(0))
