@@ -7,6 +7,9 @@ import math
 def to_proper(numerator: int, denominator: int) -> Tuple[int, int]:
     """Converts `numerator` and `denominator` to their simplest ratio.
 
+    Raises:
+        ValueError when both numerator and denominator is zero
+
     Examples:
         >>> to_proper(7, 28)
         (1, 4)
@@ -14,9 +17,6 @@ def to_proper(numerator: int, denominator: int) -> Tuple[int, int]:
         (-2, 3)
         >>> to_proper(3, 4)
         (3, 4)
-
-    Raises:
-        ValueError when both numerator and denominator is zero
     """
     if numerator == 0:
         if denominator == 0:
@@ -139,14 +139,60 @@ class Fraction:
     def __neg__(self):
         return Fraction(-self.numerator, self.denominator)
 
-    def is_positive(self):
+    def is_positive(self) -> bool:
+        """Returns True if fraction is positive (more than zero).
+
+        Examples:
+            >>> Fraction(1).is_positive()
+            True
+            >>> Fraction(0).is_positive()
+            False
+            >>> Fraction(-1).is_positive()
+            False
+        """
         return self.numerator > 0
 
-    def is_negative(self):
+    def is_negative(self) -> bool:
+        """Returns True if fraction is negative (less than zero).
+
+        Examples:
+            >>> Fraction(1).is_negative()
+            False
+            >>> Fraction(0).is_negative()
+            False
+            >>> Fraction(-1).is_negative()
+            True
+        """
         return self.numerator < 0
 
     def is_zero(self):
+        """Returns True if fraction is zero, False otherwise.
+
+        Examples:
+            >>> Fraction(1).is_zero()
+            False
+            >>> Fraction(0).is_zero()
+            True
+            >>> Fraction(-1).is_zero()
+            False
+        """
         return self.numerator == 0
 
     def is_infinite(self):
+        """Returns True if limit of the fraction tends to infinity.
+
+        Examples:
+            >>> Fraction(1, 0).is_infinite()
+            True
+            >>> Fraction(0, 1).is_infinite()
+            False
+            >>> Fraction(-1, 0).is_infinite()
+            True
+        """
         return self.denominator == 0
+
+
+if __name__ == '__main__':
+    """Run the doctests in all methods."""
+    import doctest
+    doctest.testmod(verbose=True)
