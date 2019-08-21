@@ -8,7 +8,7 @@ def to_proper(numerator: int, denominator: int) -> Tuple[int, int]:
     """Converts `numerator` and `denominator` to their simplest ratio.
 
     Raises:
-        ValueError when both numerator and denominator is zero
+        ValueError: If both `numerator` and `denominator` is zero
 
     Examples:
         >>> to_proper(7, 28)
@@ -63,6 +63,10 @@ class Fraction:
     Since Fractions are stored in proper form, each value has a
     unique representation, e.g. 4/5, 24/30, and -20/-25 have the same
     internal representation.
+
+    Attributes:
+        numerator (int): the numerator of the fraction
+        denominator (int): the denominator of the fraction
     """
 
     def __init__(self, numerator, denominator=1):

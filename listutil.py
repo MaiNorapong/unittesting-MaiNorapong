@@ -2,10 +2,14 @@ def unique(lst: list) -> list:
     """Return a list containing only the first occurrence of each distinct
        element in list.  That is, all duplicates are omitted.
 
-    Arguments:
-        lst: a list of elements (not modified)
+    Args:
+        lst (list): a list of elements (not modified)
+
     Returns:
-        a new list containing only distinct elements from list
+        list: a new list containing only distinct elements from list
+
+    Raises:
+        TypeError: if `list` is not of type list
 
     Examples:
     >>> unique([5])
@@ -16,7 +20,7 @@ def unique(lst: list) -> list:
     []
     >>> unique(5)
     Traceback (most recent call last):
-    ...
+      ...
     TypeError: 'int' is not a list
     """
     if not isinstance(lst, list):
