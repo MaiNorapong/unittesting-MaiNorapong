@@ -90,6 +90,7 @@ class Fraction:
         return self.__str__()
 
     def __float__(self):
+        """Return the float representation of the fraction. 1/0 is considered as inf."""
         if self.is_infinite():
             sign = 1 if self.is_positive() else -1
             return sign * math.inf
