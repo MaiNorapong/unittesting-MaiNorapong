@@ -46,7 +46,7 @@ def to_ratio(x: float) -> Tuple[int, int]:
         (-6, 125)
     """
     i = 0
-    num = x
+    num = float(x)
     while not num.is_integer():
         num *= 10
         i += 1
@@ -89,10 +89,22 @@ class Fraction:
     def __repr__(self):
         return self.__str__()
 
-    def __add__(self, other: Fraction) -> Union[Fraction, math.nan]:
+    def __float__(self):
+        if self.is_infinite():
+            sign = 1 if self.is_positive() else -1
+            return sign * math.inf
+        return self.numerator / self.denominator
+
+    def __add__(self, other: Union[int, float, Fraction]) -> Union[Fraction, math.nan]:
         """Return the sum of two fractions as a new fraction.
            Use the standard formula  a/b + c/d = (ad+bc)/(b*d)
         """
+        if not isinstance(other, Fraction):
+            if not isinstance(other, (int, float)):
+                raise TypeError(f"unsupported operand type(s) for +: 'Fraction' and '{str(other.__class__)[7:-1]}'")
+            else:
+                other = Fraction(other)
+
         if self.is_infinite() and other.is_infinite():
             if self.is_positive():
                 if other.is_positive():
@@ -106,16 +118,34 @@ class Fraction:
         return Fraction(self.numerator*other.denominator + other.numerator*self.denominator,
                         self.denominator * other.denominator)
 
-    def __sub__(self, other: Fraction) -> Union[Fraction, math.nan]:
+    def __sub__(self, other: Union[int, float, Fraction]) -> Union[Fraction, math.nan]:
+        if not isinstance(other, Fraction):
+            if not isinstance(other, (int, float)):
+                raise TypeError(f"unsupported operand type(s) for -: 'Fraction' and '{str(other.__class__)[7:-1]}'")
+            else:
+                other = Fraction(other)
+
         return self + (-other)
 
-    def __mul__(self, other: Fraction) -> Union[Fraction, math.nan]:
+    def __mul__(self, other: Union[int, float, Fraction]) -> Union[Fraction, math.nan]:
+        if not isinstance(other, Fraction):
+            if not isinstance(other, (int, float)):
+                raise TypeError(f"unsupported operand type(s) for *: 'Fraction' and '{str(other.__class__)[7:-1]}'")
+            else:
+                other = Fraction(other)
+
         try:
             return Fraction(self.numerator * other.numerator, self.denominator * other.denominator)
         except ValueError:
             return math.nan
 
-    def __truediv__(self, other: Fraction) -> Union[Fraction, math.nan]:
+    def __truediv__(self, other: Union[int, float, Fraction]) -> Union[Fraction, math.nan]:
+        if not isinstance(other, Fraction):
+            if not isinstance(other, (int, float)):
+                raise TypeError(f"unsupported operand type(s) for /: 'Fraction' and '{str(other.__class__)[7:-1]}'")
+            else:
+                other = Fraction(other)
+
         if self.denominator * other.numerator == 0:
             if self.numerator * other.denominator == 0:
                 # zero over zero -> indefinite
@@ -126,10 +156,20 @@ class Fraction:
         return Fraction(self.numerator * other.denominator, self.denominator * other.numerator)
 
     def __gt__(self, other: Fraction):
+        if not isinstance(other, Fraction):
+            if not isinstance(other, (int, float)):
+                raise TypeError(f"'>' not supported between instances of 'Fraction' and '{str(other.__class__)[7:-1]}'")
+            else:
+                other = Fraction(other)
         # avoids dividing because apparently multiplication is easier?
         return self.numerator * other.denominator > other.numerator * self.denominator
 
     def __lt__(self, other: Fraction):
+        if not isinstance(other, Fraction):
+            if not isinstance(other, (int, float)):
+                raise TypeError(f"'<' not supported between instances of 'Fraction' and '{str(other.__class__)[7:-1]}'")
+            else:
+                other = Fraction(other)
         # avoids dividing because apparently multiplication is easier?
         return self.numerator * other.denominator < other.numerator * self.denominator
 
