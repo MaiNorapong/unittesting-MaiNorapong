@@ -44,3 +44,4 @@ by Bill Gates.
 | operation result in not proper form | the simplest ratio is used |
 | operation result in proper form | the simplest ratio is used |
 | operation with other types | int and float supported, others not |
+| operation with nan / inf | results similar to float |

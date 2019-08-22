@@ -99,6 +99,8 @@ class FractionTest(unittest.TestCase):
         # other types
         self.assertEqual(Fraction(11, 4), Fraction(3, 4) + 2)
         self.assertEqual(Fraction(71, 20), Fraction(3, 4) + 2.8)
+        self.assertEqual(Fraction(1, 0), Fraction(3, 4) + math.inf)
+        self.assertTrue(math.isnan(Fraction(1) + math.nan))
         with self.assertRaises(TypeError):
             Fraction(3, 4) + 'string'
 
@@ -117,6 +119,8 @@ class FractionTest(unittest.TestCase):
         # other types
         self.assertEqual(Fraction(-2, 7), Fraction(5, 7) - 1)
         self.assertEqual(Fraction(51, 14), Fraction(50, 7) - 3.5)
+        self.assertEqual(Fraction(-1, 0), Fraction(3, 4) - math.inf)
+        self.assertTrue(math.isnan(Fraction(1) - math.nan))
         with self.assertRaises(TypeError):
             Fraction(3, 4) - 'string'
 
@@ -139,6 +143,8 @@ class FractionTest(unittest.TestCase):
         self.assertEqual(Fraction(-5, 7), Fraction(5, 7) * -1)
         self.assertTrue(math.isnan(Fraction(1, 0) * 0))
         self.assertEqual(Fraction(21, 8), Fraction(3, 4) * 3.5)
+        self.assertEqual(Fraction(1, 0), Fraction(3, 4) * math.inf)
+        self.assertTrue(math.isnan(Fraction(1) * math.nan))
         with self.assertRaises(TypeError):
             Fraction(3, 4) * 'string'
 
@@ -161,6 +167,8 @@ class FractionTest(unittest.TestCase):
         self.assertEqual(Fraction(5, 7), Fraction(5, 7) / 1)
         self.assertTrue(math.isnan(Fraction(0, 1) / 0))
         self.assertEqual(Fraction(3, 10), Fraction(3, 4) / 2.5)
+        self.assertEqual(Fraction(0, 1), Fraction(3, 4) / math.inf)
+        self.assertTrue(math.isnan(Fraction(1) / math.nan))
         with self.assertRaises(TypeError):
             Fraction(3, 4) / 'string'
 

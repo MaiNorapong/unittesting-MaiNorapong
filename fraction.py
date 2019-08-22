@@ -55,6 +55,33 @@ def to_ratio(x: float) -> Tuple[int, int]:
     return to_proper(num, 10**i)
 
 
+def to_fraction(x: Union[int, float]) -> Fraction:
+    """Convert an int of float to a Fraction.
+
+    Examples:
+        >>> to_fraction(0)
+        0
+        >>> to_fraction(-2.5)
+        -5/2
+        >>> to_fraction(-math.inf)
+        -1/0
+        >>> to_fraction(math.nan)
+        Traceback (most recent call last):
+          ...
+        ValueError: not a number
+    """
+    if isinstance(x, int):
+        return Fraction(x)
+    if isinstance(x, float):
+        if math.isnan(x):
+            raise ValueError('not a number')
+        if x == math.inf:
+            return Fraction(1, 0)
+        if x == -math.inf:
+            return Fraction(-1, 0)
+        return Fraction(x)
+
+
 class Fraction:
     """A fraction with a numerator and denominator and arithmetic operations.
 
@@ -104,7 +131,10 @@ class Fraction:
             if not isinstance(other, (int, float)):
                 raise TypeError(f"unsupported operand type(s) for +: 'Fraction' and '{str(other.__class__)[7:-1]}'")
             else:
-                other = Fraction(other)
+                try:
+                    other = to_fraction(other)
+                except ValueError:
+                    return math.nan
 
         if self.is_infinite() and other.is_infinite():
             if self.is_positive():
@@ -124,7 +154,10 @@ class Fraction:
             if not isinstance(other, (int, float)):
                 raise TypeError(f"unsupported operand type(s) for -: 'Fraction' and '{str(other.__class__)[7:-1]}'")
             else:
-                other = Fraction(other)
+                try:
+                    other = to_fraction(other)
+                except ValueError:
+                    return math.nan
 
         return self + (-other)
 
@@ -133,7 +166,10 @@ class Fraction:
             if not isinstance(other, (int, float)):
                 raise TypeError(f"unsupported operand type(s) for *: 'Fraction' and '{str(other.__class__)[7:-1]}'")
             else:
-                other = Fraction(other)
+                try:
+                    other = to_fraction(other)
+                except ValueError:
+                    return math.nan
 
         try:
             return Fraction(self.numerator * other.numerator, self.denominator * other.denominator)
@@ -145,7 +181,10 @@ class Fraction:
             if not isinstance(other, (int, float)):
                 raise TypeError(f"unsupported operand type(s) for /: 'Fraction' and '{str(other.__class__)[7:-1]}'")
             else:
-                other = Fraction(other)
+                try:
+                    other = to_fraction(other)
+                except ValueError:
+                    return math.nan
 
         if self.denominator * other.numerator == 0:
             if self.numerator * other.denominator == 0:
