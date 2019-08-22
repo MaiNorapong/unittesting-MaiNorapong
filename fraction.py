@@ -109,7 +109,7 @@ class Fraction:
     def __float__(self):
         """Return the float representation of the fraction. 1/0 is considered as inf."""
         if self.is_infinite():
-            sign = 1 if self.is_positive() else -1
+            sign = 1 if self.numerator > 0 else -1
             return sign * math.inf
         if self.isnan():
             return math.nan
@@ -126,12 +126,12 @@ class Fraction:
                 other = Fraction(other)
 
         if self.is_infinite() and other.is_infinite():
-            if self.is_positive():
-                if other.is_positive():
+            if self.numerator > 0:
+                if other.numerator > 0:
                     return Fraction(1, 0)
                 # inf + -inf -> indefinite
                 return Fraction(0, 0)
-            if other.is_negative():
+            if other.numerator < 0:
                 return Fraction(-1, 0)
             # -inf + inf -> indefinite
             return Fraction(0, 0)
@@ -198,11 +198,16 @@ class Fraction:
         # avoids dividing because apparently multiplication is easier?
         return self.numerator * other.denominator < other.numerator * self.denominator
 
-    def __eq__(self, other: Fraction):
+    def __eq__(self, other):
         """Two fractions are equal if they have the same value.
            Fractions are stored in proper form so the internal representation
            is unique (3/6 is same as 1/2).
         """
+        if isinstance(other, (int, float)):
+            other = Fraction(other)
+        else:
+            if not isinstance(other, Fraction):
+                return False
         # nan cannot be ordered
         if self.isnan() or other.isnan():
             return False
@@ -210,45 +215,6 @@ class Fraction:
 
     def __neg__(self):
         return Fraction(-self.numerator, self.denominator)
-
-    def is_positive(self) -> bool:
-        """Returns True if fraction is positive (more than zero).
-
-        Examples:
-            >>> Fraction(1).is_positive()
-            True
-            >>> Fraction(0).is_positive()
-            False
-            >>> Fraction(-1).is_positive()
-            False
-        """
-        return self.numerator > 0
-
-    def is_negative(self) -> bool:
-        """Returns True if fraction is negative (less than zero).
-
-        Examples:
-            >>> Fraction(1).is_negative()
-            False
-            >>> Fraction(0).is_negative()
-            False
-            >>> Fraction(-1).is_negative()
-            True
-        """
-        return self.numerator < 0
-
-    def is_zero(self):
-        """Returns True if fraction is zero, False otherwise.
-
-        Examples:
-            >>> Fraction(1).is_zero()
-            False
-            >>> Fraction(0).is_zero()
-            True
-            >>> Fraction(-1).is_zero()
-            False
-        """
-        return self.numerator == 0 and self.denominator == 1
 
     def is_infinite(self):
         """Returns True if limit of the fraction tends to infinity.

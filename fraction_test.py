@@ -198,6 +198,8 @@ class FractionTest(unittest.TestCase):
         self.assertFalse(Fraction(-1, 2) > Fraction(-1, 3))
         self.assertTrue(Fraction(-5, 6) > Fraction(-6, 7))
         self.assertFalse(Fraction(3, 7) > Fraction(3, 7))
+        with self.assertRaises(TypeError):
+            Fraction(3, 4) > 'a'
 
     def test_lt(self):
         self.assertFalse(Fraction(1, 2) < Fraction(1, 3))
@@ -205,6 +207,8 @@ class FractionTest(unittest.TestCase):
         self.assertTrue(Fraction(-1, 2) < Fraction(-1, 3))
         self.assertFalse(Fraction(-5, 6) < Fraction(-6, 7))
         self.assertFalse(Fraction(3, 7) < Fraction(3, 7))
+        with self.assertRaises(TypeError):
+            Fraction(3, 4) < 'a'
 
     def test_eq(self):
         f = Fraction(1, 2)
@@ -222,6 +226,11 @@ class FractionTest(unittest.TestCase):
         self.assertNotEqual(Fraction(-1, 0), Fraction(1, 0))
         self.assertNotEqual(Fraction(0, 0), Fraction(0, 0))
 
+        self.assertNotEqual(Fraction(1), 'a')
+        self.assertNotEqual(Fraction(1), [])
+        self.assertEqual(Fraction(1), 1)
+        self.assertEqual(Fraction(3, 4), 0.75)
+
     def test_neg(self):
         self.assertEqual(Fraction(0), -Fraction(0))
         self.assertEqual(Fraction(-1, 0), -Fraction(1, 0))
@@ -230,24 +239,6 @@ class FractionTest(unittest.TestCase):
         self.assertEqual(Fraction(3, 1), -Fraction(-3, 1))
         self.assertEqual(Fraction(2, 5), -Fraction(-2, 5))
         self.assertTrue(Fraction(0, 0).__neg__().isnan())
-
-    def test_is_positive(self):
-        self.assertTrue(Fraction(1).is_positive())
-        self.assertFalse(Fraction(0).is_positive())
-        self.assertFalse(Fraction(-1).is_positive())
-        self.assertFalse(Fraction(0, 0).is_positive())
-
-    def test_is_negative(self):
-        self.assertFalse(Fraction(1).is_negative())
-        self.assertFalse(Fraction(0).is_negative())
-        self.assertTrue(Fraction(-1).is_negative())
-        self.assertFalse(Fraction(0, 0).is_negative())
-
-    def test_is_zero(self):
-        self.assertFalse(Fraction(1).is_zero())
-        self.assertTrue(Fraction(0).is_zero())
-        self.assertFalse(Fraction(-1).is_zero())
-        self.assertFalse(Fraction(0, 0).is_zero())
 
     def test_is_infinite(self):
         self.assertTrue(Fraction(1, 0).is_infinite())
