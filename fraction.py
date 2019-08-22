@@ -4,11 +4,16 @@ from typing import Tuple, Union
 import math
 
 
+def type_error_msg_1(operand: str, other) -> str:
+    return f"unsupported operand type(s) for {operand}: 'Fraction' and '{str(other.__class__)[7:-1]}'"
+
+
+def type_error_msg_2(operand: str, other) -> str:
+    return f"'{operand}' not supported between instances of 'Fraction' and '{str(other.__class__)[7:-1]}'"
+
+
 def to_proper(numerator: int, denominator: int) -> Tuple[int, int]:
     """Converts `numerator` and `denominator` to their simplest ratio.
-
-    Raises:
-        ValueError: If both `numerator` and `denominator` is zero
 
     Examples:
         >>> to_proper(7, 28)
@@ -17,10 +22,12 @@ def to_proper(numerator: int, denominator: int) -> Tuple[int, int]:
         (-2, 3)
         >>> to_proper(3, 4)
         (3, 4)
+        >>> to_proper(0, 0)
+        (0, 0)
     """
     if numerator == 0:
         if denominator == 0:
-            raise ValueError('numerator and denominator cannot be 0 at the same time')
+            return 0, 0
         return 0, 1
     if denominator == 0:
         if numerator > 0:
@@ -44,7 +51,17 @@ def to_ratio(x: float) -> Tuple[int, int]:
         (7, 8)
         >>> to_ratio(-0.048)
         (-6, 125)
+        >>> to_ratio(math.inf)
+        (1, 0)
+        >>> to_ratio(math.nan)
+        (0, 0)
     """
+    if math.isnan(x):
+        return 0, 0
+    if x == math.inf:
+        return 1, 0
+    if x == -math.inf:
+        return -1, 0
     i = 0
     num = float(x)
     while not num.is_integer():
@@ -53,33 +70,6 @@ def to_ratio(x: float) -> Tuple[int, int]:
     num = int(num)
     assert x == num / 10**i
     return to_proper(num, 10**i)
-
-
-def to_fraction(x: Union[int, float]) -> Fraction:
-    """Convert an int of float to a Fraction.
-
-    Examples:
-        >>> to_fraction(0)
-        0
-        >>> to_fraction(-2.5)
-        -5/2
-        >>> to_fraction(-math.inf)
-        -1/0
-        >>> to_fraction(math.nan)
-        Traceback (most recent call last):
-          ...
-        ValueError: not a number
-    """
-    if isinstance(x, int):
-        return Fraction(x)
-    if isinstance(x, float):
-        if math.isnan(x):
-            raise ValueError('not a number')
-        if x == math.inf:
-            return Fraction(1, 0)
-        if x == -math.inf:
-            return Fraction(-1, 0)
-        return Fraction(x)
 
 
 class Fraction:
@@ -106,7 +96,7 @@ class Fraction:
             f = Fraction(*to_ratio(numerator)) / Fraction(*to_ratio(denominator))
             self.numerator, self.denominator = f.numerator, f.denominator
         else:
-            raise TypeError('numerator and denominator muse be numbers')
+            raise TypeError("numerator must be 'int' or 'float'")
         assert isinstance(self.numerator, int)
         assert isinstance(self.denominator, int)
 
@@ -121,6 +111,8 @@ class Fraction:
         if self.is_infinite():
             sign = 1 if self.is_positive() else -1
             return sign * math.inf
+        if self.isnan():
+            return math.nan
         return self.numerator / self.denominator
 
     def __add__(self, other: Union[int, float, Fraction]) -> Union[Fraction, math.nan]:
@@ -129,67 +121,52 @@ class Fraction:
         """
         if not isinstance(other, Fraction):
             if not isinstance(other, (int, float)):
-                raise TypeError(f"unsupported operand type(s) for +: 'Fraction' and '{str(other.__class__)[7:-1]}'")
+                raise TypeError(type_error_msg_1('+', other))
             else:
-                try:
-                    other = to_fraction(other)
-                except ValueError:
-                    return math.nan
+                other = Fraction(other)
 
         if self.is_infinite() and other.is_infinite():
             if self.is_positive():
                 if other.is_positive():
                     return Fraction(1, 0)
                 # inf + -inf -> indefinite
-                return math.nan
+                return Fraction(0, 0)
             if other.is_negative():
                 return Fraction(-1, 0)
             # -inf + inf -> indefinite
-            return math.nan
+            return Fraction(0, 0)
         return Fraction(self.numerator*other.denominator + other.numerator*self.denominator,
                         self.denominator * other.denominator)
 
     def __sub__(self, other: Union[int, float, Fraction]) -> Union[Fraction, math.nan]:
         if not isinstance(other, Fraction):
             if not isinstance(other, (int, float)):
-                raise TypeError(f"unsupported operand type(s) for -: 'Fraction' and '{str(other.__class__)[7:-1]}'")
+                raise TypeError(type_error_msg_1('-', other))
             else:
-                try:
-                    other = to_fraction(other)
-                except ValueError:
-                    return math.nan
+                other = Fraction(other)
 
         return self + (-other)
 
     def __mul__(self, other: Union[int, float, Fraction]) -> Union[Fraction, math.nan]:
         if not isinstance(other, Fraction):
             if not isinstance(other, (int, float)):
-                raise TypeError(f"unsupported operand type(s) for *: 'Fraction' and '{str(other.__class__)[7:-1]}'")
+                raise TypeError(type_error_msg_1('*', other))
             else:
-                try:
-                    other = to_fraction(other)
-                except ValueError:
-                    return math.nan
+                other = Fraction(other)
 
-        try:
-            return Fraction(self.numerator * other.numerator, self.denominator * other.denominator)
-        except ValueError:
-            return math.nan
+        return Fraction(self.numerator * other.numerator, self.denominator * other.denominator)
 
     def __truediv__(self, other: Union[int, float, Fraction]) -> Union[Fraction, math.nan]:
         if not isinstance(other, Fraction):
             if not isinstance(other, (int, float)):
-                raise TypeError(f"unsupported operand type(s) for /: 'Fraction' and '{str(other.__class__)[7:-1]}'")
+                raise TypeError(type_error_msg_1('/', other))
             else:
-                try:
-                    other = to_fraction(other)
-                except ValueError:
-                    return math.nan
+                other = Fraction(other)
 
         if self.denominator * other.numerator == 0:
             if self.numerator * other.denominator == 0:
                 # zero over zero -> indefinite
-                return math.nan
+                return Fraction(0, 0)
             if other.numerator < 0:
                 # because negative zero = zero
                 return Fraction(-self.numerator * other.denominator, 0)
@@ -198,18 +175,26 @@ class Fraction:
     def __gt__(self, other: Fraction):
         if not isinstance(other, Fraction):
             if not isinstance(other, (int, float)):
-                raise TypeError(f"'>' not supported between instances of 'Fraction' and '{str(other.__class__)[7:-1]}'")
+                raise TypeError(type_error_msg_2('>', other))
             else:
                 other = Fraction(other)
+
+        if self.isnan() or other.isnan():
+            # nan cannot be ordered
+            return False
         # avoids dividing because apparently multiplication is easier?
         return self.numerator * other.denominator > other.numerator * self.denominator
 
     def __lt__(self, other: Fraction):
         if not isinstance(other, Fraction):
             if not isinstance(other, (int, float)):
-                raise TypeError(f"'<' not supported between instances of 'Fraction' and '{str(other.__class__)[7:-1]}'")
+                raise TypeError(type_error_msg_2('<', other))
             else:
                 other = Fraction(other)
+
+        if self.isnan() or other.isnan():
+            # nan cannot be ordered
+            return False
         # avoids dividing because apparently multiplication is easier?
         return self.numerator * other.denominator < other.numerator * self.denominator
 
@@ -218,6 +203,9 @@ class Fraction:
            Fractions are stored in proper form so the internal representation
            is unique (3/6 is same as 1/2).
         """
+        # nan cannot be ordered
+        if self.isnan() or other.isnan():
+            return False
         return self.numerator == other.numerator and self.denominator == other.denominator
 
     def __neg__(self):
@@ -260,7 +248,7 @@ class Fraction:
             >>> Fraction(-1).is_zero()
             False
         """
-        return self.numerator == 0
+        return self.numerator == 0 and self.denominator == 1
 
     def is_infinite(self):
         """Returns True if limit of the fraction tends to infinity.
@@ -273,7 +261,15 @@ class Fraction:
             >>> Fraction(-1, 0).is_infinite()
             True
         """
-        return self.denominator == 0
+        return self.denominator == 0 and self.numerator in (1, -1)
+
+    def isnan(self):
+        """ Return True if fraction is a NaN (not a number), and False otherwise.
+
+        Notes:
+            named ``isnan`` to comply with the naming in the math module
+        """
+        return self.numerator == self.denominator == 0
 
 
 if __name__ == '__main__':
