@@ -5,10 +5,12 @@ import math
 
 
 def type_error_msg_1(operand: str, other) -> str:
+    """Return a python built-in like error message"""
     return f"unsupported operand type(s) for {operand}: 'Fraction' and '{str(other.__class__)[7:-1]}'"
 
 
 def type_error_msg_2(operand: str, other) -> str:
+    """Return a python built-in like error message"""
     return f"'{operand}' not supported between instances of 'Fraction' and '{str(other.__class__)[7:-1]}'"
 
 
@@ -75,7 +77,7 @@ def to_ratio(x: float) -> Tuple[int, int]:
 class Fraction:
     """A fraction with a numerator and denominator and arithmetic operations.
 
-    Fractions are always stored in proper form, without common factors in 
+    Fractions are always stored in proper form, without common factors in
     numerator and denominator, and denominator >= 0.
     Since Fractions are stored in proper form, each value has a
     unique representation, e.g. 4/5, 24/30, and -20/-25 have the same
@@ -92,9 +94,9 @@ class Fraction:
         """
         if isinstance(numerator, int) and isinstance(denominator, int):
             self.numerator, self.denominator = to_proper(numerator, denominator)
-        elif isinstance(numerator, float) or isinstance(numerator, float):
-            f = Fraction(*to_ratio(numerator)) / Fraction(*to_ratio(denominator))
-            self.numerator, self.denominator = f.numerator, f.denominator
+        elif isinstance(numerator, float) or isinstance(denominator, float):
+            frac = Fraction(*to_ratio(numerator)) / Fraction(*to_ratio(denominator))
+            self.numerator, self.denominator = frac.numerator, frac.denominator
         else:
             raise TypeError("numerator must be 'int' or 'float'")
         assert isinstance(self.numerator, int)
@@ -122,8 +124,7 @@ class Fraction:
         if not isinstance(other, Fraction):
             if not isinstance(other, (int, float)):
                 raise TypeError(type_error_msg_1('+', other))
-            else:
-                other = Fraction(other)
+            other = Fraction(other)
 
         if self.is_infinite() and other.is_infinite():
             if self.numerator > 0:
@@ -142,8 +143,7 @@ class Fraction:
         if not isinstance(other, Fraction):
             if not isinstance(other, (int, float)):
                 raise TypeError(type_error_msg_1('-', other))
-            else:
-                other = Fraction(other)
+            other = Fraction(other)
 
         return self + (-other)
 
@@ -151,8 +151,7 @@ class Fraction:
         if not isinstance(other, Fraction):
             if not isinstance(other, (int, float)):
                 raise TypeError(type_error_msg_1('*', other))
-            else:
-                other = Fraction(other)
+            other = Fraction(other)
 
         return Fraction(self.numerator * other.numerator, self.denominator * other.denominator)
 
@@ -160,8 +159,7 @@ class Fraction:
         if not isinstance(other, Fraction):
             if not isinstance(other, (int, float)):
                 raise TypeError(type_error_msg_1('/', other))
-            else:
-                other = Fraction(other)
+            other = Fraction(other)
 
         if self.denominator * other.numerator == 0:
             if self.numerator * other.denominator == 0:
@@ -176,8 +174,7 @@ class Fraction:
         if not isinstance(other, Fraction):
             if not isinstance(other, (int, float)):
                 raise TypeError(type_error_msg_2('>', other))
-            else:
-                other = Fraction(other)
+            other = Fraction(other)
 
         if self.isnan() or other.isnan():
             # nan cannot be ordered
@@ -189,8 +186,7 @@ class Fraction:
         if not isinstance(other, Fraction):
             if not isinstance(other, (int, float)):
                 raise TypeError(type_error_msg_2('<', other))
-            else:
-                other = Fraction(other)
+            other = Fraction(other)
 
         if self.isnan() or other.isnan():
             # nan cannot be ordered
