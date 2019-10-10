@@ -1,4 +1,5 @@
 ## Unit Testing Assignment
+[![Build Status](https://travis-ci.org/MaiNorapong/unittesting-MaiNorapong.svg?branch=master)](https://travis-ci.org/MaiNorapong/unittesting-MaiNorapong)
 
 by Mai Norapong.
 
