@@ -1,5 +1,6 @@
 ## Unit Testing Assignment
 [![Build Status](https://travis-ci.com/MaiNorapong/unittesting-MaiNorapong.svg?branch=master)](https://travis-ci.com/MaiNorapong/unittesting-MaiNorapong)
+[![codecov](https://codecov.io/gh/MaiNorapong/unittesting-MaiNorapong/branch/master/graph/badge.svg)](https://codecov.io/gh/MaiNorapong/unittesting-MaiNorapong)
 
 by Mai Norapong.
 

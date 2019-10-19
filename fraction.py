@@ -103,10 +103,10 @@ class Fraction:
         assert isinstance(self.denominator, int)
 
     def __str__(self):
-        return f"{self.numerator}{f'/{self.denominator}' if self.denominator != 1 else ''}"
+        return self.__repr__()
 
     def __repr__(self):
-        return self.__str__()
+        return f"{self.numerator}{f'/{self.denominator}' if self.denominator != 1 else ''}"
 
     def __float__(self):
         """Return the float representation of the fraction. 1/0 is considered as inf."""

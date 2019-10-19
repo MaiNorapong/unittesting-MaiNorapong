@@ -200,6 +200,9 @@ class FractionTest(unittest.TestCase):
         self.assertFalse(Fraction(3, 7) > Fraction(3, 7))
         with self.assertRaises(TypeError):
             Fraction(3, 4) > 'a'
+        self.assertTrue(Fraction(4, 3) > 1)
+        self.assertFalse(Fraction(1, 0) > Fraction(math.nan))
+        self.assertFalse(Fraction(1, 0) > Fraction(1, 0))
 
     def test_lt(self):
         self.assertFalse(Fraction(1, 2) < Fraction(1, 3))
@@ -209,6 +212,9 @@ class FractionTest(unittest.TestCase):
         self.assertFalse(Fraction(3, 7) < Fraction(3, 7))
         with self.assertRaises(TypeError):
             Fraction(3, 4) < 'a'
+        self.assertTrue(Fraction(3, 4) < 1)
+        self.assertFalse(Fraction(-1, 0) < Fraction(math.nan))
+        self.assertFalse(Fraction(-1, 0) < Fraction(-1, 0))
 
     def test_eq(self):
         """Test Fraction.__eq__()"""
@@ -254,3 +260,7 @@ class FractionTest(unittest.TestCase):
         self.assertFalse(Fraction(-1, 0).isnan())
         self.assertFalse(Fraction(0).isnan())
         self.assertTrue(Fraction(0, 0).isnan())
+
+
+if __name__ == '__main__':
+    unittest.main(verbosity=2)
